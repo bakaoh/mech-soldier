@@ -38,6 +38,7 @@ class SyncModel {
     }
 
     async runCrawler() {
+        console.log(`Executor ${this.executor.address}. Balance ${await this.executor.getBnbBalance()}`);
         this.crawler = new Crawler("Sync", SYNC_TOPIC, BLOCK_FILE, async (log) => {
             const values = web3.eth.abi.decodeParameters(['uint256', 'uint256'], log.data)
             await this.onSyncLog(log.blockNumber, log.transactionIndex, log.logIndex, log.address, toBN(values[0].toString(10)), toBN(values[1].toString(10)));
@@ -65,7 +66,7 @@ class SyncModel {
             if (ok) {
                 if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
                 this.lastExecute[`${token0}-${token1}`] = Date.now();
-                const routers = [factory2Router(factory1), factory2Router(factory2)];
+                const routers = [factory2Router[factory1], factory2Router[factory2]];
                 const tx = await this.executor.execute(amountIn.toString(10), routers, [token1, token0], [token0, token1]);
                 console.log(`Execute`, tx);
             }
@@ -79,7 +80,7 @@ class SyncModel {
             if (ok) {
                 if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
                 this.lastExecute[`${token0}-${token1}`] = Date.now();
-                const routers = [factory2Router(factory1), factory2Router(factory2)];
+                const routers = [factory2Router[factory1], factory2Router[factory2]];
                 const tx = await this.executor.execute(amountIn.toString(10), routers, [token0, token1], [token1, token0]);
                 console.log(`Execute`, tx);
             }
