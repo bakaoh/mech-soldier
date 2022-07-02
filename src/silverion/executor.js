@@ -23,8 +23,8 @@ class Executor {
 
     async execute(amountIn, routers, path1, path2) {
         if (this.running) return "Busy";
+        this.running = true;
         try {
-            this.running = true;
             const data = SilverionContract.methods.holyray(
                 web3.utils.toHex(amountIn),
                 routers.map(a => web3.utils.toChecksumAddress(a)),
@@ -32,6 +32,8 @@ class Executor {
                 path2.map(a => web3.utils.toChecksumAddress(a))
             ).encodeABI();
             return this.sendTx(Silverion.address, data);
+        } catch (err) {
+            return `Fail ${err.reason ? err.reason : err.toString()}`;
         } finally {
             this.running = false;
         }
