@@ -29,7 +29,7 @@ class SyncModel {
     async runCrawler() {
         this.crawler = new Crawler("Sync", SYNC_TOPIC, BLOCK_FILE, async (log) => {
             const values = web3.eth.abi.decodeParameters(['uint256', 'uint256'], log.data)
-            await this.onSyncLog(log.blockNumber, log.transactionIndex, log.logIndex, log.address, values[0], values[1]);
+            await this.onSyncLog(log.blockNumber, log.transactionIndex, log.logIndex, log.address, toBN(values[0].toString(10)), toBN(values[1].toString(10)));
         }, 200);
         await this.crawler.run();
     }
