@@ -33,7 +33,7 @@ class Executor {
             ).encodeABI();
             return await this.sendTx(Silverion.address, data);
         } catch (err) {
-            return `Fail ${err.reason ? err.reason : err.toString()}`;
+            return `Fail (${path1[1]}) ${err.reason ? err.reason : err.toString()}`;
         } finally {
             this.running = false;
         }
@@ -51,8 +51,8 @@ class Executor {
         const txCount = await web3.eth.getTransactionCount(this.address);
         var txObject = {};
         txObject.nonce = web3.utils.toHex(txCount);
-        txObject.gasLimit = web3.utils.toHex(data ? 1000000 : 21000);
-        txObject.gasPrice = web3.utils.toHex(web3.utils.toWei("5", "gwei"));
+        txObject.gasLimit = web3.utils.toHex(data ? 500000 : 21000);
+        txObject.gasPrice = web3.utils.toHex(web3.utils.toWei("7", "gwei"));
         txObject.to = web3.utils.toChecksumAddress(to);
         txObject.value = value;
         if (data) txObject.data = data;
