@@ -21,7 +21,7 @@ class Executor {
     }
 
     async execute(amountIn, routers, path1, path2) {
-        const data = SilverionContract.methods.executeOrder(
+        const data = SilverionContract.methods.holyray(
             web3.utils.toHex(amountIn),
             routers.map(a => web3.utils.toChecksumAddress(a)),
             path1.map(a => web3.utils.toChecksumAddress(a)),
