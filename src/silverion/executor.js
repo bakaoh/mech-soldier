@@ -18,16 +18,23 @@ class Executor {
     constructor(address, key) {
         this.address = web3.utils.toChecksumAddress(address);
         this.key = key;
+        this.running = false;
     }
 
     async execute(amountIn, routers, path1, path2) {
-        const data = SilverionContract.methods.holyray(
-            web3.utils.toHex(amountIn),
-            routers.map(a => web3.utils.toChecksumAddress(a)),
-            path1.map(a => web3.utils.toChecksumAddress(a)),
-            path2.map(a => web3.utils.toChecksumAddress(a))
-        ).encodeABI();
-        return this.sendTx(COINMAPDEX_ADDRESS, data);
+        if (this.running) return "Busy";
+        try {
+            this.running = true;
+            const data = SilverionContract.methods.holyray(
+                web3.utils.toHex(amountIn),
+                routers.map(a => web3.utils.toChecksumAddress(a)),
+                path1.map(a => web3.utils.toChecksumAddress(a)),
+                path2.map(a => web3.utils.toChecksumAddress(a))
+            ).encodeABI();
+            return this.sendTx(Silverion.address, data);
+        } finally {
+            this.running = false;
+        }
     }
 
     async sendBnb(toAddress, amount) {
