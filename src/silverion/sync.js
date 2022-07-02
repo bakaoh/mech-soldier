@@ -46,14 +46,14 @@ class SyncModel {
         if (Math.abs(priceA - priceB) * 100 < priceA) return;
         if (ContractAddress.BUSD == token1 || ContractAddress.USDT == token1 || ContractAddress.WBNB == token1) {
             const amountIn = ContractAddress.WBNB != token1 ? toBN("200000000000000000000") : toBN("1000000000000000000");
-            const [factory1, factory2] = priceA > priceB ? [factoryA, factoryB] : [factoryB, factoryA];
+            const [factory1, factory2] = priceA < priceB ? [factoryA, factoryB] : [factoryB, factoryA];
             const amountOut1 = getAmountOut(factory1, amountIn, this.reserves[token0][token1][factory1][1], this.reserves[token0][token1][factory1][0]);
             const amountOut2 = getAmountOut(factory2, amountOut1, this.reserves[token0][token1][factory2][0], this.reserves[token0][token1][factory2][1]);
             const ok = amountOut2.gt(amountIn);
             console.log(`Found [${token0}-${token1}] ${amountIn.toString(10)} ${getFactoryName(factory1)}=>${amountOut2.toString(10)} ${getFactoryName(factory2)} (${ok})`);
         } else if (ContractAddress.BUSD == token0 || ContractAddress.USDT == token0 || ContractAddress.WBNB == token0) {
             const amountIn = ContractAddress.WBNB != token0 ? toBN("200000000000000000000") : toBN("1000000000000000000");
-            const [factory1, factory2] = priceA < priceB ? [factoryA, factoryB] : [factoryB, factoryA];
+            const [factory1, factory2] = priceA > priceB ? [factoryA, factoryB] : [factoryB, factoryA];
             const amountOut1 = getAmountOut(factory1, amountIn, this.reserves[token0][token1][factory1][0], this.reserves[token0][token1][factory1][1]);
             const amountOut2 = getAmountOut(factory2, amountOut1, this.reserves[token0][token1][factory2][1], this.reserves[token0][token1][factory2][0]);
             const ok = amountOut2.gt(amountIn);
