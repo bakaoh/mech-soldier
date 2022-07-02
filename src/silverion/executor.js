@@ -31,7 +31,7 @@ class Executor {
                 path1.map(a => web3.utils.toChecksumAddress(a)),
                 path2.map(a => web3.utils.toChecksumAddress(a))
             ).encodeABI();
-            return this.sendTx(Silverion.address, data);
+            return await this.sendTx(Silverion.address, data);
         } catch (err) {
             return `Fail ${err.reason ? err.reason : err.toString()}`;
         } finally {
