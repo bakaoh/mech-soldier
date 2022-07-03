@@ -62,14 +62,14 @@ class SyncModel {
             const amountOut1 = getAmountOut(factory1, amountIn, this.reserves[token0][token1][factory1][1], this.reserves[token0][token1][factory1][0]);
             const amountOut2 = getAmountOut(factory2, amountOut1, this.reserves[token0][token1][factory2][0], this.reserves[token0][token1][factory2][1]);
             const ok = amountOut2.gt(amountIn);
-            console.log(`Found(${ok}) [${token0}](${getFactoryName(factory1)}=>${getFactoryName(factory2)}: ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}`);
+            console.log(`Found(${ok}) [${token0}](${getFactoryName(factory1)}=>${getFactoryName(factory2)}): ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}`);
             if (ok) {
                 setTimeout(() => {
                     const amountOut1L = getAmountOut(factory1, amountIn, this.reserves[token0][token1][factory1][1], this.reserves[token0][token1][factory1][0]);
                     const amountOut2L = getAmountOut(factory2, amountOut1L, this.reserves[token0][token1][factory2][0], this.reserves[token0][token1][factory2][1]);
                     const okL = amountOut2L.gt(amountIn);
                     console.log(`FoundLater(${okL}) [${token0}] ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}->${getNumber(amountOut2L.toString(10), 3)}`);
-                }, 6000);
+                }, 3000);
                 //     if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
                 //     this.lastExecute[`${token0}-${token1}`] = Date.now();
                 //     const routers = [factory2Router[factory1], factory2Router[factory2]];
@@ -82,14 +82,14 @@ class SyncModel {
             const amountOut1 = getAmountOut(factory1, amountIn, this.reserves[token0][token1][factory1][0], this.reserves[token0][token1][factory1][1]);
             const amountOut2 = getAmountOut(factory2, amountOut1, this.reserves[token0][token1][factory2][1], this.reserves[token0][token1][factory2][0]);
             const ok = amountOut2.gt(amountIn);
-            console.log(`Found(${ok}) [${token1}](${getFactoryName(factory1)}=>${getFactoryName(factory2)}: ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}`);
+            console.log(`Found(${ok}) [${token1}](${getFactoryName(factory1)}=>${getFactoryName(factory2)}): ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}`);
             if (ok) {
                 setTimeout(() => {
                     const amountOut1L = getAmountOut(factory1, amountIn, this.reserves[token0][token1][factory1][1], this.reserves[token0][token1][factory1][0]);
                     const amountOut2L = getAmountOut(factory2, amountOut1L, this.reserves[token0][token1][factory2][0], this.reserves[token0][token1][factory2][1]);
                     const okL = amountOut2L.gt(amountIn);
                     console.log(`FoundLater(${okL}) [${token1}] ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}->${getNumber(amountOut2L.toString(10), 3)}`);
-                }, 6000);
+                }, 3000);
                 //     if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
                 //     this.lastExecute[`${token0}-${token1}`] = Date.now();
                 //     const routers = [factory2Router[factory1], factory2Router[factory2]];
