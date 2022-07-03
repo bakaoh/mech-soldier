@@ -87,6 +87,27 @@ class SyncModel {
         }
     }
 
+    async getFee(r00, r01, r10, r11) {
+        let type = "";
+        if (r00.gt(r10) && r11.gt(r01)) type = "buy0";
+        else if (r10.gt(r00) && r01.gt(r11)) type = "sell0";
+        else if (r10.gt(r00) && r11.gt(r01)) type = "addLP";
+        else if (r00.gt(r10) && r01.gt(r11)) type = "removeLP";
+        let fee = 0;
+        if (type == "sell0") {
+            const a = (parseInt(r01.sub(r11).muln(1000000).div(r10.sub(r00))) / 1000000)
+            const b = (parseInt(r01.muln(1000000).div(r10)) / 1000000)
+            fee = Math.abs(a - b) * 100 / b;
+        }
+        if (type == "buy0") {
+            const a = (parseInt(r11.sub(r01).muln(1000000).div(r00.sub(r10))) / 1000000)
+            const b = (parseInt(r01.muln(1000000).div(r10)) / 1000000)
+            console.log('Fee', Math.abs(a - b) * 100 / b)
+            fee = Math.abs(a - b) * 100 / b;
+        }
+        return [type, fee];
+    }
+
     async onSyncLog(block, txIdx, logIdx, pair, reserve0, reserve1) {
         if (reserve0 == ZERO || reserve1 == ZERO) return;
         const tokens = this.pairModel.getTokens(pair);
@@ -96,7 +117,8 @@ class SyncModel {
         if (!this.reserves[token0][token1]) this.reserves[token0][token1] = {};
 
         if (this.reserves[token0][token1][factory]) {
-            console.log(token0, token1, this.reserves[token0][token1][factory][0].toString(10), this.reserves[token0][token1][factory][1].toString(10), reserve0.toString(10), reserve1.toString(10));
+            const [type, fee] = await this.getFee(this.reserves[token0][token1][factory][0], this.reserves[token0][token1][factory][1], reserve0, reserve1);
+            console.log(type, fee, token0, token1, this.reserves[token0][token1][factory][0].toString(10), this.reserves[token0][token1][factory][1].toString(10), reserve0.toString(10), reserve1.toString(10));
         }
         this.reserves[token0][token1][factory] = [reserve0, reserve1];
         for (let other in this.reserves[token0][token1]) {
