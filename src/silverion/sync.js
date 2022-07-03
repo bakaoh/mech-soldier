@@ -69,6 +69,10 @@ class SyncModel {
                     const amountOut2L = getAmountOut(factory2, amountOut1L, this.reserves[token0][token1][factory2][0], this.reserves[token0][token1][factory2][1]);
                     const okL = amountOut2L.gt(amountIn);
                     console.log(`FoundLater(${okL}) [${token0}] ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}->${getNumber(amountOut2L.toString(10), 3)}`);
+                    const amountOut1R = getAmountOut(factory2, amountIn, this.reserves[token0][token1][factory2][1], this.reserves[token0][token1][factory2][0]);
+                    const amountOut2R = getAmountOut(factory1, amountOut1R, this.reserves[token0][token1][factory1][0], this.reserves[token0][token1][factory1][1]);
+                    const okR = amountOut2R.gt(amountIn);
+                    console.log(`FoundLaterR(${okR}) [${token0}] ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}->${getNumber(amountOut2R.toString(10), 3)}`);
                 }, 3000);
                 //     if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
                 //     this.lastExecute[`${token0}-${token1}`] = Date.now();
@@ -89,6 +93,10 @@ class SyncModel {
                     const amountOut2L = getAmountOut(factory2, amountOut1L, this.reserves[token0][token1][factory2][0], this.reserves[token0][token1][factory2][1]);
                     const okL = amountOut2L.gt(amountIn);
                     console.log(`FoundLater(${okL}) [${token1}] ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}->${getNumber(amountOut2L.toString(10), 3)}`);
+                    const amountOut1R = getAmountOut(factory2, amountIn, this.reserves[token0][token1][factory2][1], this.reserves[token0][token1][factory2][0]);
+                    const amountOut2R = getAmountOut(factory1, amountOut1R, this.reserves[token0][token1][factory1][0], this.reserves[token0][token1][factory1][1]);
+                    const okR = amountOut2R.gt(amountIn);
+                    console.log(`FoundLaterR(${okR}) [${token1}] ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}->${getNumber(amountOut2R.toString(10), 3)}`);
                 }, 3000);
                 //     if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
                 //     this.lastExecute[`${token0}-${token1}`] = Date.now();
