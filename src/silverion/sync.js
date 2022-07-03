@@ -62,28 +62,28 @@ class SyncModel {
             const amountOut1 = getAmountOut(factory1, amountIn, this.reserves[token0][token1][factory1][1], this.reserves[token0][token1][factory1][0]);
             const amountOut2 = getAmountOut(factory2, amountOut1, this.reserves[token0][token1][factory2][0], this.reserves[token0][token1][factory2][1]);
             const ok = amountOut2.gt(amountIn);
-            console.log(`Found(${ok}) [${token0}] ${amountIn.toString(10)} ${getFactoryName(factory1)}=>${amountOut2.toString(10)} ${getFactoryName(factory2)}`);
-            if (ok) {
-                if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
-                this.lastExecute[`${token0}-${token1}`] = Date.now();
-                const routers = [factory2Router[factory1], factory2Router[factory2]];
-                const tx = await this.executor.execute(amountIn.toString(10), routers, [token1, token0], [token0, token1]);
-                console.log(`Execute`, tx);
-            }
+            console.log(`Found(${ok}) [${token0}] ${getNumber(amountIn.toString(10), 2)} ${getFactoryName(factory1)}=>${getNumber(amountOut2.toString(10), 2)} ${getFactoryName(factory2)}`);
+            // if (ok) {
+            //     if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
+            //     this.lastExecute[`${token0}-${token1}`] = Date.now();
+            //     const routers = [factory2Router[factory1], factory2Router[factory2]];
+            //     const tx = await this.executor.execute(amountIn.toString(10), routers, [token1, token0], [token0, token1]);
+            //     console.log(`Execute`, tx);
+            // }
         } else if (supportQuote.includes(token0)) {
             const amountIn = ContractAddress.WBNB != token0 ? toBN("200000000000000000000") : toBN("1000000000000000000");
             const [factory1, factory2] = priceA > priceB ? [factoryA, factoryB] : [factoryB, factoryA];
             const amountOut1 = getAmountOut(factory1, amountIn, this.reserves[token0][token1][factory1][0], this.reserves[token0][token1][factory1][1]);
             const amountOut2 = getAmountOut(factory2, amountOut1, this.reserves[token0][token1][factory2][1], this.reserves[token0][token1][factory2][0]);
             const ok = amountOut2.gt(amountIn);
-            console.log(`Found(${ok}) [${token1}] ${amountIn.toString(10)} ${getFactoryName(factory1)}=>${amountOut2.toString(10)} ${getFactoryName(factory2)}`);
-            if (ok) {
-                if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
-                this.lastExecute[`${token0}-${token1}`] = Date.now();
-                const routers = [factory2Router[factory1], factory2Router[factory2]];
-                const tx = await this.executor.execute(amountIn.toString(10), routers, [token0, token1], [token1, token0]);
-                console.log(`Execute`, tx);
-            }
+            console.log(`Found(${ok}) [${token1}] ${getNumber(amountIn.toString(10), 2)} ${getFactoryName(factory1)}=>${getNumber(amountOut2.toString(10), 2)} ${getFactoryName(factory2)}`);
+            // if (ok) {
+            //     if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
+            //     this.lastExecute[`${token0}-${token1}`] = Date.now();
+            //     const routers = [factory2Router[factory1], factory2Router[factory2]];
+            //     const tx = await this.executor.execute(amountIn.toString(10), routers, [token0, token1], [token1, token0]);
+            //     console.log(`Execute`, tx);
+            // }
         }
     }
 
@@ -95,6 +95,9 @@ class SyncModel {
         if (!this.reserves[token0]) this.reserves[token0] = {};
         if (!this.reserves[token0][token1]) this.reserves[token0][token1] = {};
 
+        if (this.reserves[token0][token1][factory]) {
+            console.log(token0, token1, this.reserves[token0][token1][factory][0].toString(10), this.reserves[token0][token1][factory][1].toString(10), reserve0.toString(10), reserve1.toString(10));
+        }
         this.reserves[token0][token1][factory] = [reserve0, reserve1];
         for (let other in this.reserves[token0][token1]) {
             await this.check(token0, token1, factory, other);
