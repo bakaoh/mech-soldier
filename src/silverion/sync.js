@@ -62,28 +62,40 @@ class SyncModel {
             const amountOut1 = getAmountOut(factory1, amountIn, this.reserves[token0][token1][factory1][1], this.reserves[token0][token1][factory1][0]);
             const amountOut2 = getAmountOut(factory2, amountOut1, this.reserves[token0][token1][factory2][0], this.reserves[token0][token1][factory2][1]);
             const ok = amountOut2.gt(amountIn);
-            console.log(`Found(${ok}) [${token0}] ${getNumber(amountIn.toString(10), 2)} ${getFactoryName(factory1)}=>${getNumber(amountOut2.toString(10), 2)} ${getFactoryName(factory2)}`);
-            // if (ok) {
-            //     if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
-            //     this.lastExecute[`${token0}-${token1}`] = Date.now();
-            //     const routers = [factory2Router[factory1], factory2Router[factory2]];
-            //     const tx = await this.executor.execute(amountIn.toString(10), routers, [token1, token0], [token0, token1]);
-            //     console.log(`Execute`, tx);
-            // }
+            console.log(`Found(${ok}) [${token0}](${getFactoryName(factory1)}=>${getFactoryName(factory2)}: ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}`);
+            if (ok) {
+                setTimeout(() => {
+                    const amountOut1L = getAmountOut(factory1, amountIn, this.reserves[token0][token1][factory1][1], this.reserves[token0][token1][factory1][0]);
+                    const amountOut2L = getAmountOut(factory2, amountOut1L, this.reserves[token0][token1][factory2][0], this.reserves[token0][token1][factory2][1]);
+                    const okL = amountOut2L.gt(amountIn);
+                    console.log(`FoundLater(${okL}) [${token0}] ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}->${getNumber(amountOut2L.toString(10), 3)}`);
+                }, 6000);
+                //     if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
+                //     this.lastExecute[`${token0}-${token1}`] = Date.now();
+                //     const routers = [factory2Router[factory1], factory2Router[factory2]];
+                //     const tx = await this.executor.execute(amountIn.toString(10), routers, [token1, token0], [token0, token1]);
+                //     console.log(`Execute`, tx);
+            }
         } else if (supportQuote.includes(token0)) {
             const amountIn = ContractAddress.WBNB != token0 ? toBN("200000000000000000000") : toBN("1000000000000000000");
             const [factory1, factory2] = priceA > priceB ? [factoryA, factoryB] : [factoryB, factoryA];
             const amountOut1 = getAmountOut(factory1, amountIn, this.reserves[token0][token1][factory1][0], this.reserves[token0][token1][factory1][1]);
             const amountOut2 = getAmountOut(factory2, amountOut1, this.reserves[token0][token1][factory2][1], this.reserves[token0][token1][factory2][0]);
             const ok = amountOut2.gt(amountIn);
-            console.log(`Found(${ok}) [${token1}] ${getNumber(amountIn.toString(10), 2)} ${getFactoryName(factory1)}=>${getNumber(amountOut2.toString(10), 2)} ${getFactoryName(factory2)}`);
-            // if (ok) {
-            //     if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
-            //     this.lastExecute[`${token0}-${token1}`] = Date.now();
-            //     const routers = [factory2Router[factory1], factory2Router[factory2]];
-            //     const tx = await this.executor.execute(amountIn.toString(10), routers, [token0, token1], [token1, token0]);
-            //     console.log(`Execute`, tx);
-            // }
+            console.log(`Found(${ok}) [${token1}](${getFactoryName(factory1)}=>${getFactoryName(factory2)}: ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}`);
+            if (ok) {
+                setTimeout(() => {
+                    const amountOut1L = getAmountOut(factory1, amountIn, this.reserves[token0][token1][factory1][1], this.reserves[token0][token1][factory1][0]);
+                    const amountOut2L = getAmountOut(factory2, amountOut1L, this.reserves[token0][token1][factory2][0], this.reserves[token0][token1][factory2][1]);
+                    const okL = amountOut2L.gt(amountIn);
+                    console.log(`FoundLater(${okL}) [${token1}] ${getNumber(amountIn.toString(10), 3)}->${getNumber(amountOut2.toString(10), 3)}->${getNumber(amountOut2L.toString(10), 3)}`);
+                }, 6000);
+                //     if (this.lastExecute[`${token0}-${token1}`] && (Date.now() - this.lastExecute[`${token0}-${token1}`] < 5000)) return;
+                //     this.lastExecute[`${token0}-${token1}`] = Date.now();
+                //     const routers = [factory2Router[factory1], factory2Router[factory2]];
+                //     const tx = await this.executor.execute(amountIn.toString(10), routers, [token0, token1], [token1, token0]);
+                //     console.log(`Execute`, tx);
+            }
         }
     }
 
@@ -102,7 +114,6 @@ class SyncModel {
         if (type == "buy0") {
             const a = (parseInt(r11.sub(r01).muln(1000000).div(r00.sub(r10))) / 1000000)
             const b = (parseInt(r01.muln(1000000).div(r10)) / 1000000)
-            console.log('Fee', Math.abs(a - b) * 100 / b)
             fee = Math.abs(a - b) * 100 / b;
         }
         return [type, fee];
@@ -116,10 +127,10 @@ class SyncModel {
         if (!this.reserves[token0]) this.reserves[token0] = {};
         if (!this.reserves[token0][token1]) this.reserves[token0][token1] = {};
 
-        if (this.reserves[token0][token1][factory]) {
-            const [type, fee] = await this.getFee(this.reserves[token0][token1][factory][0], this.reserves[token0][token1][factory][1], reserve0, reserve1);
-            console.log(type, fee, token0, token1, this.reserves[token0][token1][factory][0].toString(10), this.reserves[token0][token1][factory][1].toString(10), reserve0.toString(10), reserve1.toString(10));
-        }
+        // if (this.reserves[token0][token1][factory]) {
+        //     const [type, fee] = await this.getFee(this.reserves[token0][token1][factory][0], this.reserves[token0][token1][factory][1], reserve0, reserve1);
+        //     console.log(type, fee, token0, token1, this.reserves[token0][token1][factory][0].toString(10), this.reserves[token0][token1][factory][1].toString(10), reserve0.toString(10), reserve1.toString(10));
+        // }
         this.reserves[token0][token1][factory] = [reserve0, reserve1];
         for (let other in this.reserves[token0][token1]) {
             await this.check(token0, token1, factory, other);
