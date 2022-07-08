@@ -46,7 +46,7 @@ class PairModel {
     }
 
     addPool([block, txIdx, logIdx, factory, token0, token1, pair, idx]) {
-        if (!isSupportFactory(factory)) return;
+        // if (!isSupportFactory(factory)) return;
         this.pairs[pair] = { token0, token1, factory };
         if (!this.pools[token0]) this.pools[token0] = {};
         this.pools[token0][pair] = { token0, token1, factory };

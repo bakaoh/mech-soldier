@@ -45,7 +45,7 @@ const getFactoryName = (address) => {
     if (address == ContractAddress.PANCAKE_FACTORY) return "Pancake v2";
     if (address == ContractAddress.APESWAP_FACTORY) return "ApeSwap";
     if (address == ContractAddress.BISWAP_FACTORY) return "Biswap";
-    return "Uniswap v2";
+    return address;
 }
 
 module.exports = {
