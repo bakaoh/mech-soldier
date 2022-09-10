@@ -17,7 +17,7 @@ const watch = [-1001754164580];
 app.post('/check', async (req, res) => {
     if (watch.includes(req.body.chat_id)) {
         console.log(req.body);
-        bot.sendMessage(chatId, req.body.text, { parse_mode: "HTML" }).catch(console.log);
+        bot.sendMessage(533383478, req.body.text, { parse_mode: "HTML" }).catch(console.log);
     }
 
     res.json({ error: 0 });
