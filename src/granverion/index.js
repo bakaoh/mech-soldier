@@ -62,13 +62,13 @@ const ChandelierExit = (series, mult, ohlc) => {
             c++;
             bnb += 1;
             m -= ohlc[i].close;
-            // console.log(`Buy at ${cur.close} (${new Date(cur.ts)})`)
+            console.log(`Buy at ${cur.close} (${new Date(cur.ts)})`)
         }
         if (sellSignal) {
             c++;
             bnb -= 1;
             m += ohlc[i].close;
-            // console.log(`Sell at ${cur.close} (${new Date(cur.ts)})`)
+            console.log(`Sell at ${cur.close} (${new Date(cur.ts)})`)
         }
 
         last = { longStop, shortStop, dir };
@@ -78,19 +78,19 @@ const ChandelierExit = (series, mult, ohlc) => {
 };
 
 async function run() {
-    const ohlc = await OHLC('BTCUSDT', '1h');
+    const ohlc = await OHLC('FTMUSDT', '1h');
     const ha = HeikinAshi(ohlc);
-    ChandelierExit(ha, 1, ohlc);
-    ChandelierExit(ha, 1.5, ohlc);
+    // ChandelierExit(ha, 1, ohlc);
+    // ChandelierExit(ha, 1.5, ohlc);
     ChandelierExit(ha, 2, ohlc);
 
-    ChandelierExit(ha, 1, ha);
-    ChandelierExit(ha, 1.5, ha);
-    ChandelierExit(ha, 2, ha);
+    // ChandelierExit(ha, 1, ha);
+    // ChandelierExit(ha, 1.5, ha);
+    // ChandelierExit(ha, 2, ha);
 
-    ChandelierExit(ohlc, 1, ohlc);
-    ChandelierExit(ohlc, 1.5, ohlc);
-    ChandelierExit(ohlc, 2, ohlc);
+    // ChandelierExit(ohlc, 1, ohlc);
+    // ChandelierExit(ohlc, 1.5, ohlc);
+    // ChandelierExit(ohlc, 2, ohlc);
 }
 
 run()
